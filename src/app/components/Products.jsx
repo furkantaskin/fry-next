@@ -13,7 +13,7 @@ export default async function Products() {
   const data = await getProds();
   return (
     
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
       {data && data.map((item, index) => <ProdCard key={index} prod={item} />)}
     </div>
   );

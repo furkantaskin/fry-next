@@ -2,20 +2,20 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
 
 import logo from "@static/logo.png";
-import { ShoppingCart } from "lucide-react";
+import Loginmodal from "./LoginModal";
+import { useSession } from "next-auth/react";
 
 export default function Header() {
-
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
+  const { data: session, status } = useSession();
   return (
     <>
+      <p>{session ? `${session, session?.user.auth_level === 1 ? "admin": "user"}` : "session yok"}</p>
       <header className="none md:block py-6">
         <div className="container flex justify-between items-center">
           <Image src={logo} alt="Logo" priority="high"></Image>
+          <Loginmodal />
         </div>
       </header>
       <header className="block md:none"></header>
