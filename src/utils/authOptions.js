@@ -18,7 +18,6 @@ export const authOptions = {
           }
         );
         const user = res.data;
-        console.log(user);
         return user || null;
       },
     }),

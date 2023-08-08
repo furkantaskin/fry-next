@@ -5,7 +5,8 @@
       "@/*": ["./*"],
       "@components/*": ["components/*"],
       "@providers/*": ["providers/*"],
-      "@static/*": ["static/*"]
+      "@static/*": ["static/*"],
+      "@store/*": ["store/*"],
 
       
     }

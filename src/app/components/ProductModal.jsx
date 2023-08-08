@@ -1,51 +1,37 @@
 import { Fragment } from "react";
 import { useRouter } from "next/navigation";
 
-import { Loader2 } from "lucide-react";
+import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Dialog, Transition } from "@headlessui/react";
-import { signIn } from "next-auth/react";
 import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
 
-import {useLoginModalStore} from "@/store/modalStore";
+import { useProductModalStore } from "@/store/modalStore";
+
+async function addProduct(data){
+    const res = await axios.post(
+        "http://127.0.0.1:8000/addproduct",
+        {
+            name: data.name,
+            description: data.description,
+            price: data.price
+        }
+      );
+      console.log(res);
+}
+
+
 
 const signInSchema = Yup.object().shape({
-  email: Yup.string().email("E-posta geçersiz").required("E-posta gerekli"),
-  password: Yup.string()
-    .min(8, "Parola en az 8 haneli olmalıdır")
-    .required("Parola gerekli"),
+  name: Yup.string().required("Ürün başlığı gerekli"),
+  description: Yup.string().required("Ürün açıklaması gerekli"),
 });
 
-export default function Loadingmodal() {
-  const router = useRouter();
-  const isOpen = useLoginModalStore((state) => state.isOpen);
-  const closeModal = useLoginModalStore((state) => state.closeModal);
-
-  async function onSubmit(values) {
-    try {
-      const status = await signIn("credentials", {
-        redirect: false,
-        email: values.email,
-        password: values.password,
-        redirect: false,
-        callbackUrl: "/",
-      });
-      if (status.error) {
-        toast.error("E-posta ya da parola hatalı", {
-          position: toast.POSITION.TOP_RIGHT,
-          pauseOnFocusLoss: false,
-          autoClose: 2000,
-        });
-      } else {
-        closeModal();
-        router.push("/");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+export default function Productmodal() {
+  const isOpen = useProductModalStore((state) => state.isOpen);
+  const closeModal = useProductModalStore((state) => state.closeModal);
 
   return (
     <>
@@ -93,63 +79,69 @@ export default function Loadingmodal() {
 
                     <div className="mt-4">
                       <Formik
-                        initialValues={{ email: "", password: "" }}
+                        initialValues={{ name: "", description: "", price: 0 }}
                         validationSchema={signInSchema}
-                        onSubmit={(values) => onSubmit(values)}
+                        onSubmit={async (values) => await addProduct(values)}
                       >
                         {({ isSubmitting, errors, touched }) => (
                           <Form>
                             <Field
-                              name="email"
-                              type="email"
-                              placeholder="deneme@domain.com"
+                              name="name"
+                              type="text"
+                              placeholder="Ürün adı"
                               className="w-full border-2 border-gray-300 p-2 rounded-md focus:border-slate-700 transition-all duration-300 focus:outline-none"
-                              autoComplete="email"
                             />
                             <label
-                              htmlFor="email"
+                              htmlFor="name"
                               className={
-                                errors.email && touched.email
+                                errors.name && touched.name
                                   ? "hidden"
                                   : "block text-black h-8 pl-2 font-semibold mt-1 mb-3"
                               }
                             >
-                              E-posta adresiniz
+                              Ürün adı
                             </label>
                             <div
                               className={
-                                errors.email && touched.email
+                                errors.name && touched.name
                                   ? "block text-red-500 font-semibold pl-2 h-8 mt-1 mb-3"
                                   : "hidden"
                               }
                             >
-                              <ErrorMessage name="email" />
+                              <ErrorMessage name="name" />
                             </div>
                             <Field
-                              name="password"
-                              type="password"
-                              placeholder="Parola"
+                              name="description"
+                              type="description"
+                              placeholder="Ürün açıklaması"
                               className="w-full border-2 border-gray-300 p-2 rounded-md focus:border-slate-700 transition-all duration-300 focus:outline-none"
                             />
                             <label
-                              htmlFor="password"
+                              htmlFor="description"
                               className={
-                                errors.password && touched.password
+                                errors.description && touched.description
                                   ? "hidden"
                                   : "block text-black h-8 pl-2 font-semibold mt-1 mb-3"
                               }
                             >
-                              Parolanız
+                              Ürün Açıklaması
                             </label>
                             <div
                               className={
-                                errors.password && touched.password
+                                errors.description && touched.description
                                   ? "block text-red-500 font-semibold pl-2 h-8 mt-1 mb-3"
                                   : "hidden"
                               }
                             >
-                              <ErrorMessage name="password" />
+                              <ErrorMessage name="description" />
                             </div>
+                            <Field
+                              name="price"
+                              type="text"
+                              placeholder="Fiyat"
+                              className="w-full border-2 mb-4 border-gray-300 p-2 rounded-md focus:border-slate-700 transition-all duration-300 focus:outline-none"
+                              aria-label="Fiyat"
+                            />
                             <div className="flex justify-between">
                               <button
                                 type="button"
@@ -160,17 +152,10 @@ export default function Loadingmodal() {
                               </button>
                               <button
                                 type="submit"
-                                className="flex items-center justify-center gap-3 bg-slate-700 text-white font-lg rounded-md py-2 px-4 hover:bg-gray-900 transition duration-300 disabled:bg-gray-300"
+                                className="bg-slate-700 text-white font-lg rounded-md py-2 px-4 hover:bg-gray-900 transition duration-300 disabled:bg-gray-300"
                                 disabled={isSubmitting}
                               >
-                                {isSubmitting ? (
-                                  <>
-                                    <Loader2 className="animate-spin" />
-                                    <span>Giriş Yapılıyor</span>
-                                  </>
-                                ) : (
-                                  "Giriş yap"
-                                )}
+                                {isSubmitting ? "Ürün Ekleniyor" : "Ürün Ekle"}
                               </button>
                             </div>
                           </Form>
