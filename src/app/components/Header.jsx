@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import logo from "@static/logo.png";
 import Loginmodal from "./LoginModal";
+import LoadScreen from "./LoadScreen";
 import { useLoginModalStore, useProductModalStore } from "@/store/modalStore";
 
 import { ToastContainer } from "react-toastify";
@@ -22,6 +23,7 @@ export default function Header() {
   );
   return (
     <>
+      {status === "loading" && <LoadScreen give={session} />}
       <div className="fixed inset-0 pointer-events-none select-none z-50">
         <ToastContainer />
       </div>
