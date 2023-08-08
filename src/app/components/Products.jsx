@@ -20,7 +20,6 @@ export default function Products() {
         const { data } = res;
         if (isMounted) {
           reset();
-          console.log(products);
           addProduct(data.prods);
         }
       } catch (error) {
