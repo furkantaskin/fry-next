@@ -2,42 +2,58 @@ import { Fragment } from "react";
 import { useRouter } from "next/navigation";
 
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
+import { toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Dialog, Transition } from "@headlessui/react";
 import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useProductModalStore } from "@/store/modalStore";
+import { useProductStore } from "@/store/productsStore";
 
-async function addProduct(data){
-    const res = await axios.post(
-        "http://127.0.0.1:8000/addproduct",
-        {
-            name: data.name,
-            description: data.description,
-            price: data.price
-        }
-      );
-      console.log(res);
+async function handleProduct(data) {
+  console.log(process.env.REMOTE_API);
+  try {
+    const res = await axios.post(`https://firiyaapi-1-d9568468.deta.app/addproduct`, {
+      name: data.name,
+      description: data.description,
+      price: data.price,
+    });
+    if (res.statusText === "OK") {
+      toast.success("Ürün başarıyla eklendi", {
+        position: toast.POSITION.TOP_RIGHT,
+        pauseOnFocusLoss: false,
+        autoClose: 2000,
+      });
+      return true;
+    }
+  } catch (error) {
+    toast.error(`Ürün eklenirken hata oluştu: ${error}`, {
+      position: toast.POSITION.TOP_RIGHT,
+      pauseOnFocusLoss: false,
+      autoClose: 2000,
+    });
+  }
 }
-
-
 
 const signInSchema = Yup.object().shape({
   name: Yup.string().required("Ürün başlığı gerekli"),
   description: Yup.string().required("Ürün açıklaması gerekli"),
+  price: Yup.number()
+    .typeError("Ürün fiyatı geçersiz.")
+    .min(0, "Ürünün fiyatı 0'dan düşük olamaz")
+    .label("price"),
 });
 
 export default function Productmodal() {
   const isOpen = useProductModalStore((state) => state.isOpen);
   const closeModal = useProductModalStore((state) => state.closeModal);
+  const addProduct = useProductStore((state) => state.addProduct);
+  const products = useProductStore((state) => state.products);
 
   return (
     <>
-      <div className="fixed inset-0 pointer-events-none select-none z-50">
-        <ToastContainer className="absolute" />
-      </div>
       {isOpen && (
         <Transition appear show={isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -69,11 +85,11 @@ export default function Productmodal() {
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      Giriş Yapın
+                      Ürün Ekleyin
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Sepete ürün eklemek için giriş yapmanız gerekmektedir
+                        Eklemek istediğiniz ürünlere dair bilgileri girin
                       </p>
                     </div>
 
@@ -81,7 +97,10 @@ export default function Productmodal() {
                       <Formik
                         initialValues={{ name: "", description: "", price: 0 }}
                         validationSchema={signInSchema}
-                        onSubmit={async (values) => await addProduct(values)}
+                        onSubmit={async (values) => {
+                          const newProd = await handleProduct(values);
+                          newProd && addProduct(values);
+                        }}
                       >
                         {({ isSubmitting, errors, touched }) => (
                           <Form>
@@ -139,9 +158,28 @@ export default function Productmodal() {
                               name="price"
                               type="text"
                               placeholder="Fiyat"
-                              className="w-full border-2 mb-4 border-gray-300 p-2 rounded-md focus:border-slate-700 transition-all duration-300 focus:outline-none"
+                              className="w-full border-2 border-gray-300 p-2 rounded-md focus:border-slate-700 transition-all duration-300 focus:outline-none"
                               aria-label="Fiyat"
                             />
+                            <label
+                              htmlFor="price"
+                              className={
+                                errors.price && touched.price
+                                  ? "hidden"
+                                  : "block text-black h-8 pl-2 font-semibold mt-1 mb-3"
+                              }
+                            >
+                              Ürün Fiyatı
+                            </label>
+                            <div
+                              className={
+                                errors.price && touched.price
+                                  ? "block text-red-500 font-semibold pl-2 h-8 mt-1 mb-3"
+                                  : "hidden"
+                              }
+                            >
+                              <ErrorMessage name="price" />
+                            </div>
                             <div className="flex justify-between">
                               <button
                                 type="button"
@@ -152,10 +190,17 @@ export default function Productmodal() {
                               </button>
                               <button
                                 type="submit"
-                                className="bg-slate-700 text-white font-lg rounded-md py-2 px-4 hover:bg-gray-900 transition duration-300 disabled:bg-gray-300"
+                                className="flex items-center justify-center gap-3 bg-slate-700 text-white font-lg rounded-md py-2 px-4 hover:bg-gray-900 transition duration-300 disabled:bg-gray-300"
                                 disabled={isSubmitting}
                               >
-                                {isSubmitting ? "Ürün Ekleniyor" : "Ürün Ekle"}
+                                {isSubmitting ? (
+                                  <>
+                                    <Loader2 className="animate-spin" />
+                                    <span>Ürün Ekleniyor</span>
+                                  </>
+                                ) : (
+                                  "Ürün Ekle"
+                                )}
                               </button>
                             </div>
                           </Form>

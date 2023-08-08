@@ -2,14 +2,14 @@ import { Fragment } from "react";
 import { useRouter } from "next/navigation";
 
 import { Loader2 } from "lucide-react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Dialog, Transition } from "@headlessui/react";
 import { signIn } from "next-auth/react";
 import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
 
-import {useLoginModalStore} from "@/store/modalStore";
+import { useLoginModalStore } from "@/store/modalStore";
 
 const signInSchema = Yup.object().shape({
   email: Yup.string().email("E-posta geçersiz").required("E-posta gerekli"),
@@ -49,9 +49,6 @@ export default function Loadingmodal() {
 
   return (
     <>
-      <div className="fixed inset-0 pointer-events-none select-none z-50">
-        <ToastContainer className="absolute" />
-      </div>
       {isOpen && (
         <Transition appear show={isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={closeModal}>

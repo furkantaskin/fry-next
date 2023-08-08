@@ -5,8 +5,9 @@ import Image from "next/image";
 import logo from "@static/logo.png";
 import Loginmodal from "./LoginModal";
 import { useLoginModalStore, useProductModalStore } from "@/store/modalStore";
-import { ShoppingCart, LogIn, LogOut, Plus } from "lucide-react";
 
+import { ToastContainer } from "react-toastify";
+import { ShoppingCart, LogIn, LogOut, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import Productmodal from "./ProductModal";
@@ -21,6 +22,9 @@ export default function Header() {
   );
   return (
     <>
+      <div className="fixed inset-0 pointer-events-none select-none z-50">
+        <ToastContainer />
+      </div>
       <header className="none md:block py-6">
         <div className="container flex justify-between items-center">
           <Image
