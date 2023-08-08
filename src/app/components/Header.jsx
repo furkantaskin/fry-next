@@ -7,12 +7,14 @@ import logo from "@static/logo.png";
 import Loginmodal from "./LoginModal";
 import LoadScreen from "./LoadScreen";
 import { useLoginModalStore, useProductModalStore } from "@/store/modalStore";
+import { useCartStore } from "@/store/cartStore";
 
 import { ToastContainer } from "react-toastify";
 import { ShoppingCart, LogIn, LogOut, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import Productmodal from "./ProductModal";
+
 
 export default function Header() {
   const { data: session, status } = useSession();
@@ -22,6 +24,9 @@ export default function Header() {
   const openProductModal = useProductModalStore(
     (productState) => productState.openModal
   );
+
+  const cartList = useCartStore(state => state.cart)
+  console.log("Cart List:", cartList);
   return (
     <>
       {status === "loading" && <LoadScreen give={session} />}
@@ -31,11 +36,11 @@ export default function Header() {
       <header className="none md:block py-6">
         <div className="container flex justify-between items-center">
           <Link href="/" title="Ana sayfaya git" className="w-1/2 md:w-auto">
-            <Image src={logo} alt="Logo" priority="high" className="w-full" />
+            <Image src={logo} alt="Logo" priority="high" />
           </Link>
           <div
             className={`flex gap-0 ${
-              session && "fixed w-screen bottom-0 left-0"
+              session && "fixed w-screen md:w-auto bottom-0 left-0"
             }  justify-end md:gap-4 md:justify-end md:relative`}
           >
             {session?.user.auth_level === 1 && (
@@ -48,15 +53,20 @@ export default function Header() {
                 <span className="text-lg md:text-base">Ürün Ekle</span>
               </button>
             )}
+            <Link
+              href={session ? "/sepet" : {}}
+              className={`relative flex flex-1 md:flex-initial justify-center py-2 md:py-2  items-center gap-3 rounded-none md:rounded-md bg-slate-700 transition-all duration-300 px-4 text-sm font-medium text-white hover:bg-slate-900 ${!session && 'opacity-50 cursor-not-allowed'} `}
+            >
+              <ShoppingCart className="hidden md:block" />
+              <span className="text-lg md:text-base">Sepete Git</span>
+              {cartList.length > 0 && (
+                <span className="absolute top-0 right-0 flex items-center justify-center text-center w-6 h-6  bg-green-500 translate-x-1/2 -translate-y-1/2 rounded-full">
+                  {cartList.length}
+                </span>
+              )}
+            </Link>
             {session && (
               <>
-                <Link
-                  href="/sepet"
-                  className="flex flex-1 md:flex-initial justify-center py-2 md:py-2  items-center gap-3 rounded-none md:rounded-md bg-slate-700 transition-all duration-300 px-4 text-sm font-medium text-white hover:bg-slate-900 "
-                >
-                  <ShoppingCart className="hidden md:block" />
-                  <span className="text-lg md:text-base">Sepete Git</span>
-                </Link>
                 <button
                   type="button"
                   onClick={() => signOut()}

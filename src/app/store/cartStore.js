@@ -1,10 +1,11 @@
 import { create } from "zustand";
+import {immer} from "zustand/middleware/immer";
 
 const useCartStore = create((set, get) => ({
   cart: [],
   product: {},
   addToCart: (params) => {
-    const { newItem } = params;
+    const newItem = params;
     set((state) => {
       const newCart = [...state.cart, newItem];
       return {
@@ -26,3 +27,6 @@ const useCartStore = create((set, get) => ({
     })
   }
 }));
+
+
+export {useCartStore}

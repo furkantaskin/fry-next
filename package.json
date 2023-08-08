@@ -17,6 +17,7 @@
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "formik": "^2.4.3",
+    "immer": "^10.0.2",
     "lucide-react": "^0.263.1",
     "next": "13.4.12",
     "next-auth": "^4.22.4",

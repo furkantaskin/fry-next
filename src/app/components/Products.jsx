@@ -12,16 +12,13 @@ export default function Products() {
   const addProduct = useProductStore((state) => state.addProduct);
   const reset = useProductStore((state) => state.reset);
   useEffect(() => {
-    let isMounted = true;
     const getProds = async () => {
       try {
         const PRODUCTS_URL = `https://firiyaapi-1-d9568468.deta.app/products`;
         const res = await axios.get(PRODUCTS_URL);
         const { data } = res;
-        if (isMounted) {
-          reset();
-          addProduct(data.prods);
-        }
+        reset();
+        addProduct(data.prods);
       } catch (error) {
         toast.error(`Sayfa yüklenirken bir hata oluştu: ${error}`, {
           position: toast.POSITION.TOP_RIGHT,
@@ -32,16 +29,14 @@ export default function Products() {
     };
 
     getProds();
-    return () => {
-      isMounted = false; // Set the flag to false when the component unmounts
-    };
-  }, [addProduct]);
-
+  }, [addProduct, reset]);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
-      {products.map((item, index) => (
-        <ProdCard key={index} prod={item} />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+        {products.map((item, index) => (
+          <ProdCard key={index} prod={item} />
+        ))}
+      </div>
+    </>
   );
 }
