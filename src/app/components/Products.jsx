@@ -5,24 +5,42 @@ import { useEffect } from "react";
 import ProdCard from "@components/ProdCard";
 import { useProductStore } from "@/store/productsStore";
 
+import { toast } from "react-toastify";
+
 export default function Products() {
   const products = useProductStore((state) => state.products);
   const addProduct = useProductStore((state) => state.addProduct);
 
   useEffect(() => {
+    let isMounted = true;
     const getProds = async () => {
-      const PRODUCTS_URL = `https://firiyaapi-1-d9568468.deta.app/products`
-      const res = await axios.get(PRODUCTS_URL);
-      const { data } = res;
-      addProduct(data.prods);
+      try {
+        const PRODUCTS_URL = `https://firiyaapi-1-d9568468.deta.app/products`;
+        const res = await axios.get(PRODUCTS_URL);
+        const { data } = res;
+        if (isMounted) {
+          addProduct(data.prods);
+        }
+      } catch (error) {
+        toast.error(`Sayfa yüklenirken bir hata oluştu: ${error}`, {
+          position: toast.POSITION.TOP_RIGHT,
+          pauseOnFocusLoss: false,
+          autoClose: 2000,
+        });
+      }
     };
 
     getProds();
+    return () => {
+      isMounted = false; // Set the flag to false when the component unmounts
+    };
   }, [addProduct]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
-      {products.map((item, index) => <ProdCard key={index} prod={item} />)}
+      {products.map((item, index) => (
+        <ProdCard key={index} prod={item} />
+      ))}
     </div>
   );
 }

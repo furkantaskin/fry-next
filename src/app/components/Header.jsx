@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import logo from "@static/logo.png";
 import Loginmodal from "./LoginModal";
@@ -29,12 +30,14 @@ export default function Header() {
       </div>
       <header className="none md:block py-6">
         <div className="container flex justify-between items-center">
-          <Image
-            src={logo}
-            alt="Logo"
-            priority="high"
-            className="w-1/2 md:w-auto"
-          ></Image>
+          <Link href="/" title="Ana sayfaya git" className="w-1/2 md:w-auto">
+            <Image
+              src={logo}
+              alt="Logo"
+              priority="high"
+              className="w-full"
+            />
+          </Link>
           <div
             className={`flex gap-0 ${
               session && "fixed w-screen bottom-0 left-0"
@@ -58,7 +61,9 @@ export default function Header() {
                   className="flex flex-1 md:flex-initial justify-center py-2 md:py-2  items-center gap-3 rounded-none md:rounded-md bg-slate-700 transition-all duration-300 px-4 text-sm font-medium text-white hover:bg-slate-900 "
                 >
                   <ShoppingCart className="hidden md:block" />
-                  <span className="text-lg md:text-base">Sepete Git</span>
+                  <Link href="/sepet" className="text-lg md:text-base">
+                    Sepete Git
+                  </Link>
                 </button>
                 <button
                   type="button"
