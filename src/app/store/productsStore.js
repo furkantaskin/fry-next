@@ -1,5 +1,8 @@
 import {create} from "zustand";
 
+const initialProducts = [];
+
+
 const useProductStore = create((set,get) => ({
   products: [],
   addProduct: (newItems) => {
@@ -10,6 +13,9 @@ const useProductStore = create((set,get) => ({
         : [...state.products, newItems],
     }));
   },
+  reset: () => {
+    set({products: initialProducts})
+  }
 }));
 
 export { useProductStore };

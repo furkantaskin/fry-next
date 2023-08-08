@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 export default function Products() {
   const products = useProductStore((state) => state.products);
   const addProduct = useProductStore((state) => state.addProduct);
-
+  const reset = useProductStore((state) => state.reset);
   useEffect(() => {
     let isMounted = true;
     const getProds = async () => {
@@ -19,6 +19,8 @@ export default function Products() {
         const res = await axios.get(PRODUCTS_URL);
         const { data } = res;
         if (isMounted) {
+          reset();
+          console.log(products);
           addProduct(data.prods);
         }
       } catch (error) {

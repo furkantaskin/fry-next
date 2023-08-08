@@ -31,12 +31,7 @@ export default function Header() {
       <header className="none md:block py-6">
         <div className="container flex justify-between items-center">
           <Link href="/" title="Ana sayfaya git" className="w-1/2 md:w-auto">
-            <Image
-              src={logo}
-              alt="Logo"
-              priority="high"
-              className="w-full"
-            />
+            <Image src={logo} alt="Logo" priority="high" className="w-full" />
           </Link>
           <div
             className={`flex gap-0 ${
@@ -55,16 +50,13 @@ export default function Header() {
             )}
             {session && (
               <>
-                <button
-                  type="button"
-                  onClick={session ? () => console.log("dursun") : openModal}
+                <Link
+                  href="/sepet"
                   className="flex flex-1 md:flex-initial justify-center py-2 md:py-2  items-center gap-3 rounded-none md:rounded-md bg-slate-700 transition-all duration-300 px-4 text-sm font-medium text-white hover:bg-slate-900 "
                 >
                   <ShoppingCart className="hidden md:block" />
-                  <Link href="/sepet" className="text-lg md:text-base">
-                    Sepete Git
-                  </Link>
-                </button>
+                  <span className="text-lg md:text-base">Sepete Git</span>
+                </Link>
                 <button
                   type="button"
                   onClick={() => signOut()}
