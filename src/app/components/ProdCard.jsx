@@ -18,7 +18,7 @@ export default function ProdCard({ prod }) {
   }
 
   return (
-    <div className="group col-span-1 h-full bg-white border border-gray-200 shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+    <div className="group col-span-1 h-full flex flex-col justify-between bg-white border border-gray-200 shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]">
       <div className="p-4 md:p-6">
         <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-300 dark:hover:text-white">
           {prod.name}

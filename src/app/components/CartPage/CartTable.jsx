@@ -31,11 +31,11 @@ export default function CartTable({ items }) {
           </tr>
         ))}
         <tr>
-          <td className="text-xs md:text-xl font-bold text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td className="px-6 py-4 text-xs md:text-xl font-bold text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700">
             Toplam Tutar
           </td>
-          <td className="text-xs md:text-xl font-bold text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700"></td>
-          <td className="text-xs md:text-xl font-bold text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700">{totalVal} ₺</td>
+          <td className="px-6 py-4 text-xs md:text-xl font-bold text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700"></td>
+          <td className="px-6 py-4 text-xs md:text-xl font-bold text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700">{totalVal.toFixed(2)} ₺</td>
         </tr>
       </tbody>
     </table>

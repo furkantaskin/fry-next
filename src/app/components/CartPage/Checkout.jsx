@@ -50,7 +50,7 @@ export default function Checkout() {
                 : "block text-black h-8 pl-2 font-semibold mt-1 mb-3"
             }
           >
-            Ürün adı
+            Kart Sahibinin Adı Soyadı
           </label>
           <div
             className={
