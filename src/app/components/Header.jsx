@@ -39,7 +39,7 @@ export default function Header() {
           </Link>
           <div
             className={`flex gap-0 ${
-              session && "fixed w-screen md:w-auto bottom-0 left-0"
+              session ? "fixed w-screen md:w-auto bottom-0 left-0" : ""
             }  justify-end md:gap-4 md:justify-end md:relative`}
           >
             {session?.user.auth_level === 1 && (
@@ -54,7 +54,7 @@ export default function Header() {
             )}
             <Link
               href={session ? "/sepet" : {}}
-              className={`relative flex flex-1 md:flex-initial justify-center py-2 md:py-2  items-center gap-3 rounded-none md:rounded-md bg-slate-700 transition-all duration-300 px-4 text-sm font-medium text-white hover:bg-slate-900 ${!session && 'opacity-50 cursor-not-allowed'} `}
+              className={`relative flex-1 md:flex-initial justify-center py-2 md:py-2  items-center gap-3 rounded-none md:rounded-md bg-slate-700 transition-all duration-300 px-4 text-sm font-medium text-white hover:bg-slate-900 ${!session ? 'hidden md:flex opacity-50 cursor-not-allowed' : 'flex'} `}
             >
               <ShoppingCart className="hidden md:block" />
               <span className="text-lg md:text-base">Sepete Git</span>
