@@ -1,5 +1,7 @@
 import { create } from "zustand";
-import {immer} from "zustand/middleware/immer";
+
+
+const initialCart = [];
 
 const useCartStore = create((set, get) => ({
   cart: [],
@@ -25,6 +27,9 @@ const useCartStore = create((set, get) => ({
             cart: newCart
         }
     })
+  },
+  reset: () => {
+    set({cart: initialCart})
   }
 }));
 

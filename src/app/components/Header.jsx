@@ -26,7 +26,6 @@ export default function Header() {
   );
 
   const cartList = useCartStore(state => state.cart)
-  console.log("Cart List:", cartList);
   return (
     <>
       {status === "loading" && <LoadScreen give={session} />}

@@ -10,7 +10,6 @@ export default function ProdCard({ prod }) {
   const openLoginModal = useLoginModalStore((state) => state.openModal);
   const addItemToCart = useCartStore(state => state.addToCart);
   const handleAddToCart = () => {
-    console.log("Addin")
     addItemToCart({
       id: prod.id,
       name: prod.name,
